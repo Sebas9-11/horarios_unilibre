@@ -28,29 +28,36 @@ export default function ClassHours({ route }) {
     setVisible(true);
   };
 
-  //activar boton hasta 15 minutos despues de la hora de inicio de la clase
-  const InitClass15minLaterAnd15minBefore = () => {
+  function Assitence() {
     const init = route.params.init;
     const initHour = init.split(":")[0];
     const initMinutes = init.split(":")[1];
     const initClass = initHour + ":" + initMinutes;
-    const initClass15minLater = initHour + ":" + (initMinutes + 15);
+    const initClass15minLater = initHour + ":" + (initMinutes - -15);
     const initClass15minBefore = initHour + ":" + (initMinutes - 15);
     if (time >= initClass15minBefore && time <= initClass15minLater) {
-      return true;
+      return (
+        <TouchableOpacity style={styles.button}>
+          <Text>funciona </Text>
+        </TouchableOpacity>
+      );
     } else {
-      return false;
+      return (
+        <TouchableOpacity style={styles.buttonDisabled}>
+          <Text>funciona </Text>
+        </TouchableOpacity>
+      );
     }
-  };
-
-  console.log(InitClass15minLaterAnd15minBefore());
+  }
 
   return (
     <View style={styles.container}>
       <Titles label="Materia" title={route.params.name} />
       <Titles label="Curso" title={route.params.room} />
       <Titles label="Inico" title={route.params.init} />
-      <View style={styles.buttons}></View>
+      <View style={styles.buttons}>
+        <Assitence />
+      </View>
       <SnackAlert
         visible={viseble}
         onDismiss={onDismissSnackBar}
