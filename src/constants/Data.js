@@ -8,7 +8,7 @@ export const data = [
         key: "1",
         name: "Matematicas",
         room: "A-1",
-        init: "22:00",
+        init: "10:05",
         // end: "11:20",
       },
       // {

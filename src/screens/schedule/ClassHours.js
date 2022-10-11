@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SnackAlert } from "../../components/SnackAlert";
 import { Colors } from "../../constants/Colors";
-import { Button } from "react-native-paper";
+import Buttons from "../../components/buttons/Buttons";
 
 export default function ClassHours({ route }) {
   const navigation = useNavigation();
@@ -38,13 +38,13 @@ export default function ClassHours({ route }) {
     if (time >= initClass15minBefore && time <= initClass15minLater) {
       return (
         <TouchableOpacity style={styles.button}>
-          <Text>funciona </Text>
+          <Text>Marcar Ingreso</Text>
         </TouchableOpacity>
       );
     } else {
       return (
         <TouchableOpacity style={styles.buttonDisabled}>
-          <Text>funciona </Text>
+          <Text>Marcar Ingreso</Text>
         </TouchableOpacity>
       );
     }
