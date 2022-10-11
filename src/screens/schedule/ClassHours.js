@@ -28,7 +28,7 @@ export default function ClassHours({ route }) {
     setVisible(true);
   };
 
-  function Assitence() {
+  const assitence = () => {
     const init = route.params.init;
     const initHour = init.split(":")[0];
     const initMinutes = init.split(":")[1];
@@ -36,19 +36,31 @@ export default function ClassHours({ route }) {
     const initClass15minLater = initHour + ":" + (initMinutes - -15);
     const initClass15minBefore = initHour + ":" + (initMinutes - 15);
     if (time >= initClass15minBefore && time <= initClass15minLater) {
-      return (
-        <TouchableOpacity style={styles.button}>
-          <Text>funciona </Text>
-        </TouchableOpacity>
-      );
+      return true;
     } else {
-      return (
-        <TouchableOpacity style={styles.buttonDisabled}>
-          <Text>funciona </Text>
-        </TouchableOpacity>
-      );
+      return false;
     }
-  }
+  };
+
+  const Enable = () => {
+    return (
+      <View>
+        <TouchableOpacity style={styles.button}>
+          <Text>on</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const Disable = () => {
+    return (
+      <View>
+        <TouchableOpacity style={styles.buttonDisabled}>
+          <Text>of</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -56,7 +68,7 @@ export default function ClassHours({ route }) {
       <Titles label="Curso" title={route.params.room} />
       <Titles label="Inico" title={route.params.init} />
       <View style={styles.buttons}>
-        <Assitence />
+        {assitence === true ? <Disable /> : <Enable />}
       </View>
       <SnackAlert
         visible={viseble}
