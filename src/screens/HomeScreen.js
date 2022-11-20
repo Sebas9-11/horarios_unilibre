@@ -1,14 +1,16 @@
 import React from "react";
-import { SafeAreaView, View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import globalStyles from "../constants/GlobalStyles";
 import escudo from "../../assets/escudo.png";
+import services from "../services/services";
 
-export default function HomeScreen({ user }) {
-  user = "Sebastian Barrios";
+export default function HomeScreen() {
+  const user = services.user.name;
+
   return (
     <View style={styles.container}>
+      <Text style={globalStyles.title}>Bienvenido</Text>
       <Text style={globalStyles.title}>{user}</Text>
-      <Text style={globalStyles.subTitle}>Bienvenido Nuevamente</Text>
       <Image source={escudo} style={styles.image} />
     </View>
   );

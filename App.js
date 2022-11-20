@@ -1,6 +1,5 @@
-import Index from './src/navigation/Index';
-import SplashScreen from './src/screens/auth/SplashScreen';
+import Index from "./src/navigation/Index";
 
 export default function App() {
-  return <Index />
+  return <Index />;
 }

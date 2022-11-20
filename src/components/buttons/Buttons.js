@@ -1,29 +1,27 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Colors } from "../../constants/Colors";
+import { Button } from "react-native-paper";
+import { StyleSheet } from "react-native";
 
-export default function Buttons({ label, styles, onPress, disabled }) {
+export default function Buttons({ label, styles, onPress, labelStyle }) {
   return (
-    <TouchableOpacity onPress={onPress} style={[styles, styles.button]}>
-      <Text style={styles.text}>{label}</Text>
-    </TouchableOpacity>
+    <Button
+      mode="elevated"
+      onPress={onPress}
+      style={styles}
+      labelStyle={labelStyle}
+    >
+      {label}
+    </Button>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: Colors.red,
-    padding: 10,
-    borderRadius: 5,
-    margin: 5,
-    alignItems: "center",
-    justifyContent: "center",
+    width: 300,
     height: 50,
-    width: "50%",
-    borderWidth: 1,
+    margin: 12,
+    backgroundColor: "blue",
   },
-  text: {
-    color: "#fff",
-    fontSize: 16,
+  label: {
+    color: "white",
   },
 });

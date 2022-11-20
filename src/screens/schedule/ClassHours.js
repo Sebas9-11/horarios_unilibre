@@ -1,14 +1,24 @@
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
 import { SnackAlert } from "../../components/SnackAlert";
 import { Colors } from "../../constants/Colors";
 import Buttons from "../../components/buttons/Buttons";
+import DialogCard from "../../components/DialogCard";
+import { useNavigation } from "@react-navigation/native";
+import services from "../../services/services";
 
 export default function ClassHours({ route }) {
-  const navigation = useNavigation();
   const [viseble, setVisible] = React.useState(false);
+  const [dialogOn, setDialogOn] = React.useState(false);
   const onDismissSnackBar = () => setVisible(false);
+  const init = route.params.init;
+  const end = route.params.end;
+  const [tema, setTema] = React.useState("");
+  const [hora, setHora] = React.useState("");
+  const [fecha, setFecha] = React.useState("");
+  const navigation = useNavigation();
+  const user = services.user.id;
+  const name = services.user.name;
 
   function Titles({ label, title }) {
     return (
@@ -17,71 +27,84 @@ export default function ClassHours({ route }) {
       </Text>
     );
   }
+
   const date = new Date();
+  const dates =
+    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
   const hour = date.getHours();
   const minutes = date.getMinutes();
   const time = hour + ":" + minutes;
 
-  const hours = () => {
-    time;
-    Alert.alert("Time", time);
-    setVisible(true);
-  };
-
-  const assitence = () => {
-    const init = route.params.init;
-    const initHour = init.split(":")[0];
-    const initMinutes = init.split(":")[1];
-    const initClass = initHour + ":" + initMinutes;
-    const initClass15minLater = initHour + ":" + (initMinutes - -15);
-    const initClass15minBefore = initHour + ":" + (initMinutes - 15);
-    if (time >= initClass15minBefore && time <= initClass15minLater) {
-      return (
-        <TouchableOpacity style={styles.button}>
-          <Text>Marcar Ingreso</Text>
-        </TouchableOpacity>
-      );
+  const Classes = (entrada) => {
+    const Hour = entrada.split(":")[0];
+    const Minutes = entrada.split(":")[1];
+    const afterHour = Hour - 1;
+    const afterMinutes = parseInt(Minutes) + 45;
+    const class15minLater = Hour + ":" + (parseInt(Minutes) + 15);
+    const class15minBefore = Hour + ":" + (Minutes - 15);
+    const class1HourBefore = afterHour + ":" + afterMinutes;
+    if (Minutes === "00") {
+      if (time >= class1HourBefore && time <= class15minLater) {
+        setDialogOn(true);
+      } else {
+        setVisible(true);
+      }
     } else {
-      return (
-        <TouchableOpacity style={styles.buttonDisabled}>
-          <Text>Marcar Ingreso</Text>
-        </TouchableOpacity>
-      );
+      if (time >= class15minBefore && time <= class15minLater) {
+        setDialogOn(true);
+      } else {
+        setVisible(true);
+      }
     }
   };
 
-  const Enable = () => {
-    return (
-      <View>
-        <TouchableOpacity style={styles.button}>
-          <Text>on</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
-  const Disable = () => {
-    return (
-      <View>
-        <TouchableOpacity style={styles.buttonDisabled}>
-          <Text>of</Text>
-        </TouchableOpacity>
-      </View>
-    );
+  const handleSendData = () => {
+    if (tema === "") {
+      Alert.alert("Error", "Debes ingresar un tema");
+    } else {
+      setDialogOn(false);
+      setFecha(dates);
+      setHora(time);
+      navigation.goBack();
+      Alert.alert(
+        "Tema enviado",
+        `Tema: ${tema} \nHora: ${time} \nFecha: ${dates} \nProfesor: ${name} \nID: ${user}`
+      );
+    }
   };
 
   return (
     <View style={styles.container}>
       <Titles label="Materia" title={route.params.name} />
       <Titles label="Curso" title={route.params.room} />
-      <Titles label="Inico" title={route.params.init} />
+      <Titles label="Inico" title={init} />
+      <Titles label="Fin" title={end} />
       <View style={styles.buttons}>
-        {assitence === true ? <Disable /> : <Enable />}
+        <Buttons
+          label="Iniciar clase"
+          styles={styles.button}
+          labelStyle={styles.label}
+          onPress={() => Classes(init)}
+        />
+        <Buttons
+          label="Finalizar clase"
+          styles={styles.button}
+          labelStyle={styles.label}
+          onPress={() => Classes(end)}
+        />
       </View>
       <SnackAlert
         visible={viseble}
         onDismiss={onDismissSnackBar}
-        message={"Entrada registrada"}
+        label="Clase iniciada"
+        message={`Aun no es hora de la clase `}
+      />
+      <DialogCard
+        visible={dialogOn}
+        value={tema}
+        onChangeText={(text) => setTema(text)}
+        onPress={handleSendData}
+        onDismiss={() => setDialogOn(false)}
       />
     </View>
   );
@@ -106,24 +129,10 @@ const styles = StyleSheet.create({
     width: "90%",
   },
   button: {
+    margin: 12,
     backgroundColor: Colors.red,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderWidth: 1,
-    borderRadius: 10,
   },
-  buttonDisabled: {
-    backgroundColor: Colors.gray,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderWidth: 1,
-    borderRadius: 10,
-  },
-  textButton: {
+  label: {
     color: "white",
-    textAlign: "center",
-    fontSize: 12,
   },
 });
