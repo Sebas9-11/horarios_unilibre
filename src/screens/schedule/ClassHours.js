@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import React from "react";
 import { SnackAlert } from "../../components/SnackAlert";
 import { Colors } from "../../constants/Colors";
@@ -17,7 +17,7 @@ export default function ClassHours({ route }) {
   const [hora, setHora] = React.useState("");
   const [fecha, setFecha] = React.useState("");
   const navigation = useNavigation();
-  const user = services.user.id;
+  const id = services.user.id;
   const name = services.user.name;
 
   function Titles({ label, title }) {
@@ -58,18 +58,19 @@ export default function ClassHours({ route }) {
     }
   };
 
-  const handleSendData = () => {
+  const handleClases = async () => {
     if (tema === "") {
-      Alert.alert("Error", "Debes ingresar un tema");
+      Alert.alert("Error", "El campo tema no puede estar vacio");
     } else {
-      setDialogOn(false);
-      setFecha(dates);
       setHora(time);
-      navigation.goBack();
-      Alert.alert(
-        "Tema enviado",
-        `Tema: ${tema} \nHora: ${time} \nFecha: ${dates} \nProfesor: ${name} \nID: ${user}`
-      );
+      setFecha(dates);
+      const resp = await services.clases(id, name, tema, hora, fecha);
+      if (resp === 200) {
+        Alert.alert("Clase", "Clase registrada correctamente");
+        navigation.goBack();
+      } else {
+        Alert.alert("Error", "Error al registrar la clase");
+      }
     }
   };
 
@@ -103,7 +104,7 @@ export default function ClassHours({ route }) {
         visible={dialogOn}
         value={tema}
         onChangeText={(text) => setTema(text)}
-        onPress={handleSendData}
+        onPress={handleClases}
         onDismiss={() => setDialogOn(false)}
       />
     </View>
