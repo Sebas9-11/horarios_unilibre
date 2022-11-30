@@ -1,11 +1,22 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, BackHandler } from "react-native";
 import globalStyles from "../constants/GlobalStyles";
 import escudo from "../../assets/escudo.png";
 import services from "../services/services";
 
 export default function HomeScreen() {
   const user = services.user.name;
+
+  React.useEffect(() => {
+    const backAction = () => {
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  });
 
   return (
     <View style={styles.container}>

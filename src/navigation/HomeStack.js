@@ -1,8 +1,8 @@
-import HomeScreen from "../screens/HomeScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HeaderDrawer } from "../components/HeaderDrawer";
-import { Colors } from "../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
+import { Colors } from "../constants/Colors";
+import HomeScreen from "../screens/HomeScreen";
 import services from "../services/services";
 
 const Stack = createNativeStackNavigator();
@@ -20,9 +20,6 @@ export default function HomeStack() {
       screenOptions={{
         headerTitleAlign: "center",
         headerStyle: { backgroundColor: Colors.red },
-        headerLeft: () => (
-          <HeaderDrawer icon={"menu"} onPress={() => navigation.openDrawer()} />
-        ),
         headerRight: () => (
           <HeaderDrawer icon={"exit"} onPress={handleLogOut} />
         ),

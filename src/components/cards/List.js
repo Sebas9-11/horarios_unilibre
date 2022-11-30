@@ -10,7 +10,6 @@ import {
 import Card from "../cards/Card";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../../constants/Colors";
-// import { data } from "../../constants/Data";
 import services from "../../services/services";
 
 export default function List(props) {

@@ -1,7 +1,7 @@
-import { StyleSheet } from "react-native";
 import React from "react";
 import Inputs from "./Inputs";
 import Buttons from "./buttons/Buttons";
+import { StyleSheet } from "react-native";
 import { Dialog } from "react-native-paper";
 
 export default function DialogCard({

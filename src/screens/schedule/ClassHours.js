@@ -1,32 +1,23 @@
-import { View, Text, StyleSheet, Alert } from "react-native";
 import React from "react";
-import { SnackAlert } from "../../components/SnackAlert";
-import { Colors } from "../../constants/Colors";
-import Buttons from "../../components/buttons/Buttons";
-import DialogCard from "../../components/DialogCard";
-import { useNavigation } from "@react-navigation/native";
 import services from "../../services/services";
+import { Colors } from "../../constants/Colors";
+import DialogCard from "../../components/DialogCard";
+import Buttons from "../../components/buttons/Buttons";
+import { useNavigation } from "@react-navigation/native";
+import { SnackAlert } from "../../components/SnackAlert";
+import { View, Text, StyleSheet, Alert } from "react-native";
 
 export default function ClassHours({ route }) {
   const [viseble, setVisible] = React.useState(false);
   const [dialogOn, setDialogOn] = React.useState(false);
-  const onDismissSnackBar = () => setVisible(false);
-  const init = route.params.init;
-  const end = route.params.end;
   const [tema, setTema] = React.useState("");
   const [hora, setHora] = React.useState("");
   const [fecha, setFecha] = React.useState("");
   const navigation = useNavigation();
   const id = services.user.id;
   const name = services.user.name;
-
-  function Titles({ label, title }) {
-    return (
-      <Text style={styles.name}>
-        <Text style={styles.subName}>{label}:</Text> {title}
-      </Text>
-    );
-  }
+  const init = route.params.init;
+  const end = route.params.end;
 
   const date = new Date();
   const dates =
@@ -35,37 +26,27 @@ export default function ClassHours({ route }) {
   const minutes = date.getMinutes();
   const time = hour + ":" + minutes;
 
-  const Classes = (entrada) => {
-    const Hour = entrada.split(":")[0];
-    const Minutes = entrada.split(":")[1];
-    const afterHour = Hour - 1;
-    const afterMinutes = parseInt(Minutes) + 45;
-    const class15minLater = Hour + ":" + (parseInt(Minutes) + 15);
-    const class15minBefore = Hour + ":" + (Minutes - 15);
-    const class1HourBefore = afterHour + ":" + afterMinutes;
-    if (Minutes === "00") {
-      if (time >= class1HourBefore && time <= class15minLater) {
-        setDialogOn(true);
-      } else {
-        setVisible(true);
-      }
-    } else {
-      if (time >= class15minBefore && time <= class15minLater) {
-        setDialogOn(true);
-      } else {
-        setVisible(true);
-      }
-    }
+  React.useEffect(() => {
+    setHora(time);
+    setFecha(dates);
+  }, []);
+
+  const onDismissSnackBar = () => setVisible(false);
+
+  const initClass = () => {
+    services.horaDeclase(init, time) ? setDialogOn(true) : setVisible(true);
+  };
+
+  const endClass = () => {
+    services.horaDeclase(end, time) ? setDialogOn(true) : setVisible(true);
   };
 
   const handleClases = async () => {
     if (tema === "") {
       Alert.alert("Error", "El campo tema no puede estar vacio");
     } else {
-      setHora(time);
-      setFecha(dates);
-      const resp = await services.clases(id, name, tema, hora, fecha);
-      if (resp === 200) {
+      const resp = await services.clases("", id, name, tema, hora, fecha);
+      if (resp === "Clase creada") {
         Alert.alert("Clase", "Clase registrada correctamente");
         navigation.goBack();
       } else {
@@ -73,6 +54,14 @@ export default function ClassHours({ route }) {
       }
     }
   };
+
+  function Titles({ label, title }) {
+    return (
+      <Text style={styles.name}>
+        <Text style={styles.subName}>{label}:</Text> {title}
+      </Text>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -85,13 +74,13 @@ export default function ClassHours({ route }) {
           label="Iniciar clase"
           styles={styles.button}
           labelStyle={styles.label}
-          onPress={() => Classes(init)}
+          onPress={initClass}
         />
         <Buttons
           label="Finalizar clase"
           styles={styles.button}
           labelStyle={styles.label}
-          onPress={() => Classes(end)}
+          onPress={endClass}
         />
       </View>
       <SnackAlert

@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 
 export default function Inputs({ onChangeText, value, label, type, securety }) {
   return (
-    //formato de cedula
     <TextInput
       style={styles.input}
       label={label}

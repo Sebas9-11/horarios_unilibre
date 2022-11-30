@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/auth/LoginScreen";
-import MyDrawer from "./MyDrawer";
+import MyTab from "./MyTAb";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,7 +12,7 @@ export default function AuthStack() {
       }}
     >
       <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="MyDrawer" component={MyDrawer} />
+      <Stack.Screen name="MyTab" component={MyTab} />
     </Stack.Navigator>
   );
 }

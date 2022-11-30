@@ -9,27 +9,41 @@ import {
   Platform,
 } from "react-native";
 import React from "react";
-import Inputs from "../../components/Inputs";
-import Buttons from "../../components/buttons/Buttons";
 import logo from "../../../assets/logo.png";
-import { useNavigation } from "@react-navigation/native";
+import Inputs from "../../components/Inputs";
+import { Checkbox } from "react-native-paper";
 import services from "../../services/services";
+import Buttons from "../../components/buttons/Buttons";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen() {
   const navigation = useNavigation();
   const [id, setId] = React.useState("");
   const [pass, setPass] = React.useState("");
+  const [checked, setCheked] = React.useState(false);
 
   const handleLogin = async () => {
     const resp = await services.login(id, pass);
     try {
       if (resp) {
-        navigation.navigate("MyDrawer");
+        navigation.navigate("MyTab");
       } else {
         alert("Usuario o contraseña incorrectos");
       }
     } catch (err) {
       alert(console.error(err));
+    }
+  };
+
+  const handleCheck = async () => {
+    setCheked(!checked);
+    if (checked) {
+      await AsyncStorage.removeItem("id");
+      await AsyncStorage.removeItem("pass");
+    } else {
+      await AsyncStorage.setItem("id", id);
+      await AsyncStorage.setItem("pass", pass);
     }
   };
 
@@ -54,6 +68,11 @@ export default function LoginScreen() {
             value={pass}
             securety={true}
             onChangeText={(text) => setPass(text)}
+          />
+          <Checkbox.Item
+            label="Recordar Campos"
+            status={checked ? "checked" : "unchecked"}
+            onPress={handleCheck}
           />
           <Buttons
             label="Ingresar"

@@ -3,27 +3,34 @@
     "name": "horarios_unilibre",
     "slug": "horarios_unilibre",
     "version": "1.0.0",
+    "icon": "./assets/logo.png",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "splash": {
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.horarios.unilibre"
     },
     "android": {
       "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.horarios.unilibre"
     },
-    "web": {
+    "web": {},
+    "extra": {
+      "eas": {
+        "projectId": "ae129246-35f3-482a-9ab0-76aed390433c"
+      }
     }
   }
 }
